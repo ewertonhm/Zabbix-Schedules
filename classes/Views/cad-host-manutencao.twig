@@ -1,0 +1,147 @@
+{% extends "base.twig" %}
+
+
+{% block navbar %}
+    {% if admin == 1 %}
+        {% include 'navbar-admin.html' %}
+    {% else %}
+        {% include 'navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block cadastro %}
+    <form method="post" action="cad-host-manutencao.php">
+        <fieldset>
+            <h4>Colocar hosts em Manutenção</h4>
+            {% if editar %}
+                <!-- -->
+                        
+            {% elseif group %}
+            <!--  segundo acesso, caso escolha um grupo -->
+                <label for="description">Descrição: </label>
+                <input type="text" name="description" required>
+
+                <label for="group">Gupo: </label>
+                <input type="text" value="{{ group.nome }}" disabled>
+
+                <label for="start">Modificar em: </label>
+                <input type="datetime-local" name="start" required>
+
+                <label for="end">Desfazer em: </label>
+                <input type="datetime-local" name="end" required>
+
+                <input hidden name="groupid" value="{{ group.id }}">
+                <input hidden name="groupname" value="{{ group.nome }}">
+                <input class="button-primary" type="submit"  value="Agendar" name='agendar_grupo'>
+            <!-- Fim do formulário -->
+            {% elseif host %}
+            <!--  segundo acesso, caso escolha um grupo -->
+                <label for="description">Descrição: </label>
+                <input type="text" name="description" required>
+
+                <label for="group">Host: </label>
+                <input type="text" value="{{ host.nome }}" disabled>
+
+                <label for="start">Modificar em: </label>
+                <input type="datetime-local" name="start" required>
+
+                <label for="end">Desfazer em: </label>
+                <input type="datetime-local" name="end" required>
+
+                <input hidden name="hostid" value="{{ host.id }}">
+                <input hidden name="hostname" value="{{ host.nome }}">
+                <input class="button-primary" type="submit"  value="Agendar" name='agendar_host'>
+            <!-- Fim do formulário -->
+            {% else %}
+                <!-- Caso esteja voltando para esse form após criar um host -->            
+                {% if created %}
+                    <p style="color:green">Alteração agendada com sucesso.</p>
+                {% endif %}
+
+            <!--  Primeiro formulário, antes de escolher o host -->
+
+                <div class="ui-widget">
+                    <label for="hosts">Buscar Host ou Grupo: </label>
+                    <input type="text" name="group" id="groups" placeholder="Nome ou id do grupo ou host" required>
+                    {% if grouperror %}
+                        <p style="color: red">Grupo/Host não encontrado!</p>
+                    {% endif %}
+                    {% if nohosts %}
+                        <p style="color: red">Grupo não possui hosts!</p>
+                    {% endif %}
+                    <small><em> Digite pelo menos 3 caracteres para buscar.</em></small>
+
+
+                </div>
+                <br>
+                <input class="button-primary" type="submit"  value="Selecionar" name='selecionar'>
+            <!-- Fim do formulário -->
+            {% endif %}
+        </fieldset>
+    </form>
+{% endblock %}
+
+{% block lista %}
+    {% if group.hosts %}
+        <h4>Hosts no grupo selecionado</h4>
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Host</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for host in group.hosts %}
+                    <tr>
+                        <td>{{ host.hostid }}</td>
+                        <td>{{ host.host }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {% if groups or hosts %}
+        <script>
+            $( function() {
+                var availableTags = [
+                    {% if groups %}
+                        {% for group in groups %}
+                            {% if not loop.last %}
+                                "{{ group.name }} [groupid={{ group.groupid }}]",
+                            {% else %}
+                                "{{ group.name }} [groupid={{ group.groupid }}]"
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if hosts %}
+                        {% if groups %},{% endif %}
+                        {% for host in hosts %}
+                            {% if not loop.last %}
+                                "{{ host.name }} [hostid={{ host.hostid }}]",
+                            {% else %}
+                                "{{ host.name }} [hostid={{ host.hostid }}]"
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    ];
+                $( "#groups" ).autocomplete({
+                minLength: 3,
+                source: availableTags
+                });
+            } );
+        </script>
+    {% endif %}
+
+
+{% endblock %}

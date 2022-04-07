@@ -1,0 +1,25 @@
+.button-black {
+    background-color: black !important;
+    border-color: black !important;
+}
+.button-black.button-clear,
+.button-black.button-outline {
+    background-color: transparent !important;
+    color: black !important;
+}
+.button-black.button-clear {
+    border-color: transparent !important;
+}
+
+.no-padding-botton {
+    padding-bottom: 0px !important;
+}
+
+.no-margin-botton {
+    margin-bottom: 0px !important;
+}
+.no-decoration-text {
+    text-decoration: none;
+}
+
+

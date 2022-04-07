@@ -1,0 +1,31 @@
+{% extends "base.twig" %}
+
+{% block navbar %}
+    {% if admin == 1 %}
+        {% include 'navbar-admin.html' %}
+    {% else %}
+        {% include 'navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block center %}
+    <form method="post" action="edit-pass.php">
+        <fieldset>
+            <label for="nameField">Trocar senha</label>
+                <label>User ID:<lable><input type="text" value="{{ id }}" disabled>
+                <label>Email:<lable><input type="text" value="{{ email }}" disabled>
+
+                <label>Senha atual:<lable><input type="password" name="senha" placeholder="Senha atual" required>
+
+                <label>Nova senha:<lable><input type="password" id="password" name="nova_senha" placeholder="Nova senha" required>
+                <label>Confirme a senha:<lable><input type="password" id="confirm_password" placeholder="Confirme a nova senha" required>
+                <!--<input type="text" name="api" placeholder="API Key">-->                      
+            <input class="button-primary" type="submit" {% if editar %} value="Editar" name='editar' {% else %} value="Cadastrar" name='cadastrar'{% endif %}>
+        </fieldset>
+    </form>
+    
+{% block script %}
+    {% include 'password_validation.html' %}
+{% endblock %}
+
+{% endblock %}

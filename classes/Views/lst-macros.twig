@@ -1,0 +1,39 @@
+{% extends "base-centered.twig" %}
+
+
+{% block navbar %}
+    {% if admin == 1 %}
+        {% include 'navbar-admin.html' %}
+    {% else %}
+        {% include 'navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block centered %}
+    {% if macros %}
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Zabbix ID</th>
+                <th>Editar</th>
+                <th>Deletar</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for macro in macros %}
+                    <tr>
+                        <td>{{ macro.id }}</td>
+                        <td>{{ macro.nome }}</td>
+                        <td>{{ macro.zabbixid }}</td>
+
+
+                        <td><a class="button button-small" href="cad-macro.php?edite={{ macro.id }}" disabled>Editar</a></td>
+                        <td><a class="button button-small" href="cad-macro.php?delete={{ macro.id }}" disabled>Deletar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

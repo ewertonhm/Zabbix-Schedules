@@ -1,0 +1,76 @@
+{% extends "base.twig" %}
+
+{% block navbar %}
+    {% if admin == 1 %}
+        {% include 'navbar-admin.html' %}
+    {% else %}
+        {% include 'navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block cadastro %}
+    <form method="post" action="cad-usuario.php">
+        <fieldset>
+            <label for="nameField">Cadastrar Usuário</label>
+            {% if editar %}
+                <input type="text" name="nome" value="{{ editar.nome }}">  
+                <input type="email" name="email" value="{{editar.email}}">  
+                <!--<input type="text" name="api" placeholder="API Key">-->                      
+                <input type="hidden" name="id" value="{{editar.id}}">
+                <label for="admin">is Admin?</label>
+                {% if editar.admin == 1 %}
+                    <input type="checkbox" name="admin" checked>
+                {% else %}
+                    <input type="checkbox" name="admin">
+                {% endif %}
+                <label for="status">Enable?</label>
+                {% if editar.status == 1 %}
+                    <input type="checkbox" name="status" checked>
+                {% else %}
+                    <input type="checkbox" name="status">
+                {% endif %}
+
+                <br>
+            {% else %}
+                <input type="text" name="nome" placeholder="Nome do Usuário">  
+                <input type="email" name="email" placeholder="Email do Usuário">  
+                <input type="password" name="senha" placeholder="Senha do Usuário">
+                <label for="admin">is Admin?</label>
+                <input type="checkbox" name="admin">
+                <label for="status">Enable?</label>
+                <input type="checkbox" name="status">                
+                <br>
+
+                <!--<input type="text" name="api" placeholder="API Key">-->                      
+            {% endif %}
+            <input class="button-primary" type="submit" {% if editar %} value="Editar" name='editar' {% else %} value="Cadastrar" name='cadastrar'{% endif %}>
+        </fieldset>
+    </form>
+{% endblock %}
+
+{% block lista %}
+    {% if usuarios %}
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Admin</th>
+                <th>Editar</th>
+                <th>Deletar</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.id }}</td>
+                        <td>{{ usuario.email }}</td>
+                        <td>{% if usuario.admin == 1 %}Sim {% else %} Não {% endif %}</td>
+                        <td><a class="button button-small" href="cad-usuario.php?edite={{  usuario.id }}">Editar</a></td>
+                        <td><a class="button button-small" href="cad-usuario.php?delete={{ usuario.id }}">Deletar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

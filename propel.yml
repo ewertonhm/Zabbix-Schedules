@@ -1,0 +1,10 @@
+propel:
+    database:
+        connections:
+            default:
+                adapter: pgsql
+                dsn: pgsql:host=127.0.0.1;port=5432;dbname=zbx_schedule
+                user: postgres
+                password: sngesp.,
+                settings:
+                    charset: utf8

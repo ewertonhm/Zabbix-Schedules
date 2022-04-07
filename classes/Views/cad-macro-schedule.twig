@@ -1,0 +1,195 @@
+{% extends "base.twig" %}
+
+
+{% block navbar %}
+    {% if admin == 1 %}
+        {% include 'navbar-admin.html' %}
+    {% else %}
+        {% include 'navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block cadastro %}
+    <form method="post" action="cad-macro-schedule.php">
+        <fieldset>
+            <h4>Cadastrar alteração de valor de Macro</h4>
+            {% if editar %}
+                {% if editar.startexecuted %}
+                    <small><p style="color:red"> Alteração já executada, só é possível editar a data para desfazer a alteração</p></small>
+                {% endif %}
+
+                <label for="host">Host: </label>
+                <input type="text" value="{{ editar.host }}" disabled>
+
+                <label for="start">Macro: </label>
+                <input type="text" value="{{ editar.macro }}" disabled>
+                
+                {% if editar.start %}
+                
+                    <label for="start">Modificar em: </label>
+                    <input type="datetime-local" name="start" value="{{ editar.start }}" required>
+                {% elseif editar.startexecuted %}
+                    <label for="start">Modificar em: </label>
+                    <input type="datetime-local" name="start" value="{{ editar.startexecuted }}" disabled>
+                {% endif %}
+
+                <label for="end">Desfazer em: </label>
+                <small> Deixar em branco para modificar definitivamente.</small>
+                <input type="datetime-local" value="{{ editar.end }}" name="end">
+
+                <label for="oldvalue">Valor Atual: </label>
+                <input type="text" value="{{ editar.oldvalue }}" disabled>
+
+                <label for="newvalue">Novo valor: </label>
+                <input type="text" name="newvalue" value="{{ editar.newvalue }}" {% if editar.startexecuted %} disabled {% else %} required {% endif %}>
+
+
+                <input hidden name="schid" value="{{ editar.scheduleid }}">
+                {% if editar.start %}
+                    <input class="button-primary" type="submit"  value="Editar" name='editar'>
+                {% elseif editar.startexecuted %}
+                    <input class="button-primary" type="submit"  value="Editar" name='editar2'>
+                {% endif %}
+                        
+            {% elseif macro %}
+            <!--  Terceiro formulário, depois de escolher o macro -->
+                <label for="host">Host: </label>
+                <input type="text" value="{{ macro.hosts.0.host }}" disabled>
+                <input hidden name="hostname" value="{{ macro.hosts.0.host }}">
+
+
+                <label for="start">Macro: </label>
+                <input type="text" value="{{ macro.macro }}" disabled>
+                <input hidden name="macroname" value="{{ macro.macro }}">
+
+
+                <label for="start">Modificar em: </label>
+                <input type="datetime-local" name="start" required>
+
+                <label for="end">Desfazer em: </label>
+                <small> Deixar em branco para modificar definitivamente.</small>
+                <input type="datetime-local" name="end">
+
+                <label for="oldvalue">Valor Atual: </label>
+                <input type="text" value="{{ macro.value }}" disabled>
+                <input hidden name="oldvalue" value="{{ macro.value }}">
+
+
+                <label for="newvalue">Novo valor: </label>
+                <input type="text" name="newvalue" required>
+
+
+                <input hidden name="hostid" value="{{ macro.hostid }}">
+                <input hidden name="macroid" value="{{ macro.hostmacroid }}">
+                <input class="button-primary" type="submit"  value="Agendar" name='agendar'>
+            <!-- Fim do formulário -->
+            {% elseif macros %}
+            <!--  Segundo formulário, depois de escolher o host -->
+                <label for="hostname">Host: </label>
+                <input type="text" name="hostname" value="{{ macros.0.hosts.0.host }}" disabled>
+
+                <label for="macro">Macro: </label>
+                <select name="macro">
+                    {% for macro in macros %}
+                        <option value="{{ macro.hostmacroid }}">{{ macro.macro }}</option>
+                    {% endfor %}
+                </select>
+                <input hidden value="{{ host.hostid }}" name="hostid">
+
+                <input class="button-primary" type="submit"  value="Selecionar" name='selecionar'>
+            <!-- Fim do formulário -->
+            {% else %}
+                <!-- Caso esteja voltando para esse form após criar um host -->            
+                {% if created %}
+                    <p style="color:green">Alteração agendada com sucesso.</p>
+                {% endif %}
+
+            <!--  Primeiro formulário, antes de escolher o host -->
+
+                <div class="ui-widget">
+                    <label for="hosts">Buscar host: </label>
+                    <input type="text" name="host" id="hosts" placeholder="Nome do host ou hostid" required>
+                    {% if hosterror %}
+                        <p style="color: red">Host não encontrado!</p>
+                    {% endif %}
+                    {% if nomacros %}
+                        <p style="color: red">Host não possui macros!</p>
+                    {% endif %}
+                    <small><em> Digite pelo menos 3 caracteres para buscar.</em></small>
+
+
+                </div>
+                <br>
+                <input class="button-primary" type="submit"  value="Selecionar" name='selecionar'>
+            <!-- Fim do formulário -->
+            {% endif %}
+        </fieldset>
+    </form>
+{% endblock %}
+
+{% block lista %}
+    {% if schedule %}
+        <table>
+            <thead>
+            <tr>
+                <th>Host</th>
+                <th>Macro</th>
+                <th>Valor Original</th>
+                <th>Valor Novo</th>
+                <th>Data Inicio</th>
+                <th>Data Término</th>
+                <th>Executado</th>
+                <th>Revertido</th>
+                <th>Editar</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for sch in schedule %}
+                    <tr>
+                        <td>{{ sch.host }}</td>
+                        <td>{{ sch.macro }}</td>
+                        <td>{{ sch.schedule.original }}</td>
+                        <td>{{ sch.schedule.new }}</td>
+                        <td>{{ sch.schedule.from }}</td>
+                        <td>{{ sch.schedule.until }}</td>
+                        <td>{{ sch.schedule.executed ? 'Sim':'Não' }}</td>
+                        <td>{{ sch.schedule.reverted ? 'Sim':'Não' }}</td>
+
+                        <td><a class="button button-small" href="cad-macro-schedule.php?edite={{ sch.id }}">Editar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {% if hosts %}
+        <script>
+            $( function() {
+                var availableTags = [
+                    {% for host in hosts %}
+                        {% if not loop.last %}
+                            "{{ host.name }} [hostid={{ host.hostid }}]",
+                        {% else %}
+                            "{{ host.name }} [hostid={{ host.hostid }}]"
+                        {% endif %}
+                    {% endfor %}
+                    ];
+                $( "#hosts" ).autocomplete({
+                minLength: 3,
+                source: availableTags
+                });
+            } );
+        </script>
+    {% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.twig" %}
+
+{% block navbar %}
+    {% if admin == 1 %}
+        {% include 'navbar-admin.html' %}
+    {% else %}
+        {% include 'navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+
+{% block center %}
+<img style="max-width:432px; display: block; margin: 50px auto;" src="http://ativacaofibra.redeunifique.com.br/cadastro/img/logo2017.png" width="100%">
+
+    <div class="row"><br><br><br></div>
+    <div class="row">
+        <div class="column"></div>
+        <div class="column">
+
+
+        </div>
+        <div class="column"></div>
+    </div>
+    <div class="row"></div>
+
+{% endblock %}

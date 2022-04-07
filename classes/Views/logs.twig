@@ -1,0 +1,408 @@
+{% extends "base-centered.twig" %}
+
+{% block navbar %}
+    {% if admin == 1 %}
+        {% include 'navbar-admin.html' %}
+    {% else %}
+        {% include 'navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block upcenter %}
+    <form method="GET">
+        <fieldset>
+            <label for "logtype">Selecione um Log:</label>
+            <select id="logtype" name="logtype">
+                <option value="macro-all" {% if macro.all %}selected{% endif %}>Macro Todos</label>
+                <option value="macro-add" {% if macro.add %}selected{% endif %}>Macro Criação</label>
+                <option value="macro-edit" {% if macro.edit %}selected{% endif %}>Macro Edição</label>
+                <option value="macro-del" {% if macro.del %}selected{% endif %}>Macro Remoção</label>
+                <option value="macro-exec" {% if macro.exec %}selected{% endif %}>Macro Execução</label>
+                <option value="grupo-all" {% if grupo.all %}selected{% endif %}>Grupo Todos</label>
+                <option value="grupo-add" {% if grupo.add %}selected{% endif %}>Grupo Criação</label>
+                <option value="grupo-edit" {% if grupo.edit %}selected{% endif %}>Grupo Edição</label>
+                <option value="grupo-del" {% if grupo.del %}selected{% endif %}>Grupo Remoção</label>
+                <option value="grupo-exec" {% if grupo.exec %}selected{% endif %}>Grupo Execução</label>
+            </select>
+            <input type="submit">
+        </fieldset>
+    </form>
+{% endblock %}
+
+{% block centered %}
+    {% if macro.edit %}
+        <table>
+            <thead>
+            <tr>
+                <th>Logtime</th>
+                <th>User</th>
+                <th>Host</th>
+                <th>Macro</th>
+                <th>date_from</th>
+                <th>date_until</th>
+                <th>original_value</th>
+                <th>new_value</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for log in macro.edit %}
+                    <tr>
+                        <td>{{ log.logtime }}</td>
+                        <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                        <td>{{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                        <td>{{ log.macro.nome }} [hostmacroid={{ log.macro.id }}]</td>
+                        <td>{{ log.old_date_from }} >> {{ log.new_date_from }}</td>
+                        <td>{{ log.old_date_until }} >> {{ log.new_date_until }}</td>
+                        <td>{{ log.original_value }}</td>
+                        <td>{{ log.old_new_value }} >> {{ log.new_new_value }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elseif macro.add %}
+        <table>
+            <thead>
+            <tr>
+                <th>Logtime</th>
+                <th>User</th>
+                <th>Host</th>
+                <th>Macro</th>
+                <th>date_from</th>
+                <th>date_until</th>
+                <th>original_value</th>
+                <th>new_value</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for log in macro.add %}
+                    <tr>
+                        <td>{{ log.logtime }}</td>
+                        <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                        <td>{{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                        <td>{{ log.macro.nome }} [hostmacroid={{ log.macro.id }}]</td>
+                        <td>{{ log.date_from }}</td>
+                        <td>{{ log.date_until }}</td>
+                        <td>{{ log.original_value }}</td>
+                        <td>{{ log.new_value }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elseif macro.del %}
+        <table>
+            <thead>
+            <tr>
+                <th>Logtime</th>
+                <th>User</th>
+                <th>Host</th>
+                <th>Macro</th>
+                <th>date_from</th>
+                <th>date_until</th>
+                <th>original_value</th>
+                <th>new_value</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for log in macro.del %}
+                    <tr>
+                        <td>{{ log.logtime }}</td>
+                        <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                        <td>{{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                        <td>{{ log.macro.nome }} [hostmacroid={{ log.macro.id }}]</td>
+                        <td>{{ log.date_from }}</td>
+                        <td>{{ log.date_until }}</td>
+                        <td>{{ log.original_value }}</td>
+                        <td>{{ log.new_value }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elseif macro.exec %}
+        <table>
+            <thead>
+            <tr>
+                <th>Action</th>
+                <th>Logtime</th>
+                <th>User</th>
+                <th>Host</th>
+                <th>Macro</th>
+                <th>date_from</th>
+                <th>date_until</th>
+                <th>original_value</th>
+                <th>new_value</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for log in macro.exec %}
+                    <tr>
+                        <td>{% if log.pushpop == 1 %} Execute >> CHANGE {% else %} Execute >> UNCHANGE {% endif %}</td>
+                        <td>{{ log.logtime }}</td>
+                        <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                        <td>{{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                        <td>{{ log.macro.nome }} [hostmacroid={{ log.macro.id }}]</td>
+                        <td>{{ log.date_from }}</td>
+                        <td>{{ log.date_until }}</td>
+                        <td>{{ log.original_value }}</td>
+                        <td>{{ log.new_value }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% elseif macro.all %}
+        <table>
+            <thead>
+            <tr>
+                <th>Action</th>
+                <th>Logtime</th>
+                <th>User</th>
+                <th>Host</th>
+                <th>Macro</th>
+                <th>date_from</th>
+                <th>date_until</th>
+                <th>original_value</th>
+                <th>new_value</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for log in macro.all %}
+                    {% if log.action == "CREATE" or log.action == "DELETE" %}
+                        <tr>
+                            <td>{{ log.action }}</td>
+                            <td>{{ log.logtime }}</td>
+                            <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                            <td>{{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                            <td>{{ log.macro.nome }} [hostmacroid={{ log.macro.id }}]</td>
+                            <td>{{ log.date_from }}</td>
+                            <td>{{ log.date_until }}</td>
+                            <td>{{ log.original_value }}</td>
+                            <td>{{ log.new_value }}</td>
+                        </tr>
+                    {% elseif log.action == "EDIT" %}
+                        <tr>
+                            <td>{{ log.action }}</td>
+                            <td>{{ log.logtime }}</td>
+                            <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                            <td>{{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                            <td>{{ log.macro.nome }} [hostmacroid={{ log.macro.id }}]</td>
+                            <td>{{ log.old_date_from }} >> {{ log.new_date_from }}</td>
+                            <td>{{ log.old_date_until }} >> {{ log.new_date_until }}</td>
+                            <td>{{ log.original_value }}</td>
+                            <td>{{ log.old_new_value }} >> {{ log.new_new_value }}</td>
+                        </tr>
+                    {% elseif log.action == 1 or log.action == 0 %}
+                        <tr>
+                            <td>{% if log.action == 1 %} Execute >> CHANGE {% else %} Execute >> UNCHANGE {% endif %}</td>
+                            <td>{{ log.logtime }}</td>
+                            <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                            <td>{{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                            <td>{{ log.macro.nome }} [hostmacroid={{ log.macro.id }}]</td>
+                            <td>{{ log.date_from }}</td>
+                            <td>{{ log.date_until }}</td>
+                            <td>{{ log.original_value }}</td>
+                            <td>{{ log.new_value }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elseif grupo.add %}
+        <table>
+            <thead>
+            <tr>
+                <th>Logtime</th>
+                <th>User</th>
+                <th>Host/Group</th>
+                <th>date_from</th>
+                <th>date_until</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for log in grupo.add %}
+                    <tr>
+                        <td>{{ log.logtime }}</td>
+                        <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                        {% if log.host %}
+                            <td>Host: {{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                        {% elseif log.grupo %}
+                            <td>Grupo: {{ log.grupo.nome }} [groupid={{ log.grupo.hostid }}]</td>
+
+                        {% endif %}
+                        <td>{{ log.date_from }}</td>
+                        <td>{{ log.date_until }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elseif grupo.edit %}
+        <table>
+            <thead>
+            <tr>
+                <th>Logtime</th>
+                <th>User</th>
+                <th>Grupo/Host</th>
+                <th>date_from</th>
+                <th>date_until</th>
+
+            </tr>
+            </thead>
+            <tbody>
+                {% for log in grupo.edit %}
+                    <tr>
+                        <td>{{ log.logtime }}</td>
+                        <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                        {% if log.host %}
+                            <td>Host: {{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                        {% elseif log.grupo %}
+                            <td>Grupo: {{ log.grupo.nome }} [groupid={{ log.grupo.groupid }}]</td>
+                        {% endif %}
+                        <td>{{ log.old_date_from }} >> {{ log.new_date_from }}</td>
+                        <td>{{ log.old_date_until }} >> {{ log.new_date_until }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elseif grupo.del %}
+        <table>
+            <thead>
+            <tr>
+                <th>Logtime</th>
+                <th>User</th>
+                <th>Grupo/Host</th>
+                <th>date_from</th>
+                <th>date_until</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for log in grupo.del %}
+                    <tr>
+                        <td>{{ log.logtime }}</td>
+                        <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                        {% if log.host %}
+                            <td>Host: {{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                        {% elseif log.grupo %}
+                            <td>Grupo: {{ log.grupo.nome }} [groupid={{ log.grupo.groupid }}]</td>
+                        {% endif %}
+
+                        <td>{{ log.date_from }}</td>
+                        <td>{{ log.date_until }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elseif grupo.exec %}
+        <table>
+            <thead>
+            <tr>
+                <th>Action</th>
+                <th>Logtime</th>
+                <th>User</th>
+                <th>Target Group/Host</th>
+                <th>date_from</th>
+                <th>date_until</th>
+                <th>original_value</th>
+                <th>new_value</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for log in grupo.exec %}
+                    <tr>
+                        <td>{% if log.pushpop == 1 %} Execute >> CHANGE {% else %} Execute >> UNCHANGE {% endif %}</td>
+                        <td>{{ log.logtime }}</td>
+                        <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                        {% if log.grupo %}
+                        <td>Grupo: {{ log.grupo.nome }} [groupid={{ log.grupo.hostid }}]</td>
+                        {% elseif log.host %}
+                        <td>Host: {{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                        {% endif %}
+                        <td>{{ log.date_from }}</td>
+                        <td>{{ log.date_until }}</td>
+                        {% if log.original_value == 'grupo_manutenção' or log.original_value == 'host_manutenção' %}
+                            <td>{% if log.pushpop == 1 %} NOT IN group "Hosts em Manutenção" {% else %} IN group "Hosts em Manutenção" {% endif %}</td>
+                        {% else %}
+                            <td>{{ log.original_value }}</td>
+                        {% endif %}
+                        {% if log.original_value == 'grupo_manutenção' or log.original_value == 'host_manutenção' %}
+                            <td>{% if log.pushpop == 1 %} ADD group "Hosts em Manutenção" {% else %} REMOVE group "Hosts em Manutenção" {% endif %}</td>
+                        {% else %}
+                            <td>{{ log.new_value }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elseif grupo.all %}
+        <table>
+            <thead>
+            <tr>
+                <th>Action</th>
+                <th>Logtime</th>
+                <th>User</th>
+                <th>Host</th>
+                <th>date_from</th>
+                <th>date_until</th>
+                <th>original_value</th>
+                <th>new_value</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for log in grupo.all %}
+                    {% if log.action == "CREATE" or log.action == "DELETE" %}
+                        <tr>
+                            <td>{{ log.action }}</td>
+                            <td>{{ log.logtime }}</td>
+                            <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                            {% if log.grupo %}
+                            <td>Grupo: {{ log.grupo.nome }} [groupid={{ log.grupo.groupid }}]</td>
+                            {% elseif log.host %}
+                            <td>Host: {{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                            {% endif %}
+                            <td>{{ log.date_from }}</td>
+                            <td>{{ log.date_until }}</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    {% elseif log.action == "EDIT" %}
+                        <tr>
+                            <td>{{ log.action }}</td>
+                            <td>{{ log.logtime }}</td>
+                            <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                            {% if log.grupo %}
+                            <td>Grupo: {{ log.grupo.nome }} [groupid={{ log.grupo.groupid }}]</td>
+                            {% elseif log.host %}
+                            <td>Host: {{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                            {% endif %}
+                            <td>{{ log.old_date_from }} >> {{ log.new_date_from }}</td>
+                            <td>{{ log.old_date_until }} >> {{ log.new_date_until }}</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    {% elseif log.action == "EXEC" %}
+                        <tr>
+                            <td>{% if log.pushpop == 1 %} Execute >> CHANGE {% else %} Execute >> UNCHANGE {% endif %}</td>
+                            <td>{{ log.logtime }}</td>
+                            <td>{{ log.usuario.login }} [{{ log.usuario.nome }}]</td>
+                            {% if log.grupo %}
+                            <td>Grupo: {{ log.grupo.nome }} [groupid={{ log.grupo.hostid }}]</td>
+                            {% elseif log.host %}
+                            <td>Host: {{ log.host.nome }} [hostid={{ log.host.hostid }}]</td>
+                            {% endif %}
+                            <td>{{ log.date_from }}</td>
+                            <td>{{ log.date_until }}</td>
+                            {% if log.original_value == 'grupo_manutenção' or log.original_value == 'host_manutenção' %}
+                                <td>{% if log.pushpop == 1 %} NOT IN group "Hosts em Manutenção" {% else %} IN group "Hosts em Manutenção" {% endif %}</td>
+                            {% else %}
+                                <td>{{ log.original_value }}</td>
+                            {% endif %}
+                            {% if log.original_value == 'grupo_manutenção' or log.original_value == 'host_manutenção' %}
+                                <td>{% if log.pushpop == 1 %} ADD group "Hosts em Manutenção" {% else %} REMOVE group "Hosts em Manutenção" {% endif %}</td>
+                            {% else %}
+                                <td>{{ log.new_value }}</td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

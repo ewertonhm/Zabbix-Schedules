@@ -1,0 +1,39 @@
+{% extends "base-centered.twig" %}
+
+
+{% block navbar %}
+    {% if admin == 1 %}
+        {% include 'navbar-admin.html' %}
+    {% else %}
+        {% include 'navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block centered %}
+    {% if hosts %}
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Zabbix ID</th>
+                <th>Editar</th>
+                <th>Deletar</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for host in hosts %}
+                    <tr>
+                        <td>{{ host.id }}</td>
+                        <td>{{ host.nome }}</td>
+                        <td>{{ host.zabbixid }}</td>
+
+
+                        <td><a class="button button-small" href="cad-host.php?edite={{ host.id }}" disabled>Editar</a></td>
+                        <td><a class="button button-small" href="cad-host.php?delete={{ host.id }}" disabled>Deletar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

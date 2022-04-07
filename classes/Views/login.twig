@@ -1,0 +1,27 @@
+{% extends "base.twig" %}
+{% block center %}
+    <div class="row"><br><br><br></div>
+    <div class="row">
+        <div class="column"></div>
+        <div class="column">
+            <form action="login.php" method="post">
+                <div class="container">
+                    <img style="max-width:432px;" src="http://ativacaofibra.redeunifique.com.br/cadastro/img/logo2017.png" width="100%">
+
+                    <label for="uname"><b>Email</b></label>
+                    <input type="text" placeholder="Enter Email" name="uname" required>
+
+                    <label for="psw"><b>Senha</b></label>
+                    <input type="password" placeholder="Enter Password" name="psw" required>
+                    {% if error %}<p class="">Usuário ou senha incorreto!</p>{% endif %}
+                    <button type="submit">Login</button>
+                    <label>
+                        <input type="checkbox" checked="checked" name="remember"> Remember me
+                    </label>
+                </div>
+            </form>
+        </div>
+        <div class="column"></div>
+    </div>
+    <div class="row"></div>
+{% endblock %}

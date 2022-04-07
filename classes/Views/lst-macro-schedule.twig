@@ -1,0 +1,116 @@
+{% extends "base-centered.twig" %}
+
+
+{% block navbar %}
+    {% if admin == 1 %}
+        {% include 'navbar-admin.html' %}
+    {% else %}
+        {% include 'navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block centered %}
+    {% if schedule %}
+        <table>
+            <thead>
+            <tr>
+                <th>Data</th>
+                <th>Usuario</th>
+                <th>Host</th>
+                <th>Macro</th>
+                <th>Valor Original</th>
+                <th>Valor Novo</th>
+                <th>Data Inicio</th>
+                <th>Data Término</th>
+                <th>Executado</th>
+                <th>Revertido</th>
+                <th>Editar</th>
+                <th>Deletar</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for sch in schedule %}
+                    <tr>
+                        <td>{{ sch.scheduled }}</td>
+                        <td>{{ sch.usuario }}</td>
+                        <td>{{ sch.host }}</td>
+                        <td>{{ sch.macro }}</td>
+                        <td>{{ sch.schedule.original }}</td>
+                        <td>{{ sch.schedule.new }}</td>
+                        <td>{{ sch.schedule.from }}</td>
+                        <td>{{ sch.schedule.until }}</td>
+                        <td>{{ sch.schedule.executed ? 'Sim':'Não' }}</td>
+                        <td>{{ sch.schedule.reverted ? 'Sim':'Não' }}</td>
+
+                        <td><a class="button button-small" href="lst-macro-schedule.php?edite={{ sch.id }}">Editar</a></td>
+                        <td><a class="button button-small" href="lst-macro-schedule.php?delete={{ sch.id }}">Deletar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elseif editar %}
+        <form method="post" action="lst-macro-schedule.php">
+            {% if editar.startexecuted %}
+                <small><p style="color:red"> Alteração já executada, só é possível editar a data para desfazer a alteração</p></small>
+            {% endif %}
+
+            <label for="host">Host: </label>
+            <input type="text" value="{{ editar.host }}" disabled>
+
+            <label for="start">Macro: </label>
+            <input type="text" value="{{ editar.macro }}" disabled>
+            
+            {% if editar.start %}
+            
+                <label for="start">Modificar em: </label>
+                <input type="datetime-local" name="start" value="{{ editar.start }}" required>
+            {% elseif editar.startexecuted %}
+                <label for="start">Modificar em: </label>
+                <input type="datetime-local" name="start" value="{{ editar.startexecuted }}" disabled>
+            {% endif %}
+
+            <label for="end">Desfazer em: </label>
+            <small> Deixar em branco para modificar definitivamente.</small>
+            <input type="datetime-local" value="{{ editar.end }}" name="end">
+
+            <label for="oldvalue">Valor Atual: </label>
+            <input type="text" value="{{ editar.oldvalue }}" disabled>
+
+            <label for="newvalue">Novo valor: </label>
+            <input type="text" name="newvalue" value="{{ editar.newvalue }}" {% if editar.startexecuted %} disabled {% else %} required {% endif %}>
+
+
+            <input hidden name="schid" value="{{ editar.scheduleid }}">
+            {% if editar.start %}
+                <input class="button-primary" type="submit"  value="Editar" name='editar'>
+            {% elseif editar.startexecuted %}
+                <input class="button-primary" type="submit"  value="Editar" name='editar2'>
+            {% endif %}
+        </form>
+    {% elseif deletar %}
+        <form method="post" action="lst-macro-schedule.php">
+            <p> Tem certeza que deseja deletar o seguinte schedule:</p>
+            <label for="host">Host: </label>
+            <input type="text" value="{{ deletar.host }}" disabled>
+
+            <label for="start">Macro: </label>
+            <input type="text" value="{{ deletar.macro }}" disabled>
+
+            <label for="start">Modificar em: </label>
+            <input type="datetime-local" name="start" value="{{ deletar.start }}" disabled>
+
+            <label for="end">Desfazer em: </label>
+            <small> Deixar em branco para modificar definitivamente.</small>
+            <input type="datetime-local" value="{{ deletar.end }}" name="end" disabled>
+
+            <label for="oldvalue">Valor Atual: </label>
+            <input type="text" value="{{ deletar.oldvalue }}" disabled>
+
+            <label for="newvalue">Novo valor: </label>
+            <input type="text" name="newvalue" value="{{ deletar.newvalue }}" disabled>
+            <input hidden name="schid" value="{{ deletar.scheduleid }}">
+            <input class="button-primary" type="submit"  value="Deletar" name='deletar'>
+        </form>
+
+    {% endif %}
+{% endblock %}

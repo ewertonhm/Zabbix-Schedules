@@ -1,0 +1,144 @@
+{% extends "base-centered.twig" %}
+
+
+{% block navbar %}
+    {% if admin == 1 %}
+        {% include 'navbar-admin.html' %}
+    {% else %}
+        {% include 'navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block centered %}
+    {% if schedule %}
+        <h4>Manutenções</h4>
+        <table>
+            <thead>
+            <tr>
+                <th>Data</th>
+                <th>Usuario</th>
+                <th>Descrição</th>
+                <th>Grupo/Host</th>
+                <th>Data Inicio</th>
+                <th>Data Término</th>
+                <th>Executado</th>
+                <th>Revertido</th>
+                <th>Editar</th>
+                <th>Deletar</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for sch in schedule %}
+                    <tr>
+                        <td>{{ sch.scheduled }}</td>
+                        <td>{{ sch.usuario }}</td>
+                        <td>{{ sch.descricao }}</td>
+                        {% if sch.grupo %}
+                            <td>Grupo: {{ sch.grupo }}</td>
+                        {% elseif sch.host %}
+                            <td>Host: {{ sch.host }}</td>
+                        {% endif %}
+                        <td>{{ sch.schedule.from }}</td>
+                        <td>{{ sch.schedule.until }}</td>
+                        <td>{{ sch.schedule.executed ? 'Sim':'Não' }}</td>
+                        <td>{{ sch.schedule.reverted ? 'Sim':'Não' }}</td>
+                        {% if sch.grupo %}
+                            <td><a class="button button-small" href="lst-grupo-schedule.php?edite_grupo={{ sch.id }}">Editar</a></td>
+                            <td><a class="button button-small" href="lst-grupo-schedule.php?delete_grupo={{ sch.id }}">Deletar</a></td>
+                        {% elseif sch.host %}
+                            <td><a class="button button-small" href="lst-grupo-schedule.php?edite_host={{ sch.id }}">Editar</a></td>
+                            <td><a class="button button-small" href="lst-grupo-schedule.php?delete_host={{ sch.id }}">Deletar</a></td>
+                        {% endif %}
+ 
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elseif editar_grupo %}
+        {% if editar_grupo.executed %}
+            <form method="post" action="lst-grupo-schedule.php">
+                <label for="host">Grupo: </label>
+                <input type="text" value="{{ editar_grupo.grupo }}" disabled>
+                <p style="color: red">Schedule já executado, não é possível editar a data de início</p>
+
+                <label for="start">Modificar em: </label>
+                <input type="datetime-local" name="start" value="{{ editar_grupo.start }}" disabled>
+
+                <label for="end">Desfazer em: </label>
+                <input type="datetime-local" value="{{ editar_grupo.end }}" name="end">
+
+                <input hidden name="schid" value="{{ editar_grupo.scheduleid }}">
+                <input class="button-primary" type="submit"  value="Editar" name='editar_grupo'>
+            </form>
+        {% else %}
+            <form method="post" action="lst-grupo-schedule.php">
+                <label for="host">Grupo: </label>
+                <input type="text" value="{{ editar_grupo.grupo }}" disabled>
+
+                <label for="start">Modificar em: </label>
+                <input type="datetime-local" name="start" value="{{ editar_grupo.start }}" required>
+
+                <label for="end">Desfazer em: </label>
+                <input type="datetime-local" value="{{ editar_grupo.end }}" name="end">
+
+                <input hidden name="schid" value="{{ editar_grupo.scheduleid }}">
+                <input class="button-primary" type="submit"  value="Editar" name='editar_grupo'>
+            </form>
+        {% endif %}
+    {% elseif editar_host %}
+        {% if editar_host.executed %}
+            <form method="post" action="lst-grupo-schedule.php">
+                <label for="host">Host: </label>
+                <input type="text" value="{{ editar_host.host }}" disabled>
+                <p style="color: red">Schedule já executado, não é possível editar a data de início</p>
+
+                <label for="start">Modificar em: </label>
+                <input type="datetime-local" name="start" value="{{ editar_host.start }}" disabled>
+
+                <label for="end">Desfazer em: </label>
+                <input type="datetime-local" value="{{ editar_host.end }}" name="end">
+
+                <input hidden name="schid" value="{{ editar_host.scheduleid }}">
+                <input class="button-primary" type="submit"  value="Editar" name='editar_host'>
+            </form>
+        {% else %}
+            <form method="post" action="lst-grupo-schedule.php">
+                <label for="host">Host: </label>
+                <input type="text" value="{{ editar_host.host }}" disabled>
+
+                <label for="start">Modificar em: </label>
+                <input type="datetime-local" name="start" value="{{ editar_host.start }}" required>
+
+                <label for="end">Desfazer em: </label>
+                <input type="datetime-local" value="{{ editar_host.end }}" name="end">
+
+                <input hidden name="schid" value="{{ editar_host.scheduleid }}">
+                <input class="button-primary" type="submit"  value="Editar" name='editar_host'>
+            </form>
+        {% endif %}
+    {% elseif deletar %}
+        <form method="post" action="lst-grupo-schedule.php">
+            <p> Tem certeza que deseja deletar o seguinte schedule:</p>
+            <label for="host">Host: </label>
+            <input type="text" value="{{ deletar.host }}" disabled>
+
+            <label for="start">Macro: </label>
+            <input type="text" value="{{ deletar.macro }}" disabled>
+
+            <label for="start">Modificar em: </label>
+            <input type="datetime-local" name="start" value="{{ deletar.start }}" disabled>
+
+            <label for="end">Desfazer em: </label>
+            <small> Deixar em branco para modificar definitivamente.</small>
+            <input type="datetime-local" value="{{ deletar.end }}" name="end" disabled>
+
+            <label for="oldvalue">Valor Atual: </label>
+            <input type="text" value="{{ deletar.oldvalue }}" disabled>
+
+            <label for="newvalue">Novo valor: </label>
+            <input type="text" name="newvalue" value="{{ deletar.newvalue }}" disabled>
+            <input hidden name="schid" value="{{ deletar.scheduleid }}">
+            <input class="button-primary" type="submit"  value="Deletar" name='deletar'>
+        </form>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- As 3 meta tags acima *devem* vir em primeiro lugar dentro do `head`; qualquer outro conteúdo deve vir *após* essas tags -->
+    {% block head %}
+        <title>
+            {% if page_name %}
+                {{ page_name }} -
+            {% endif %}
+            Zabbix Scheduler
+        </title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+
+        <link rel="stylesheet" href="css/milligram.css">
+        <link rel="stylesheet" href="css/extra-styles.css">
+        <link rel="stylesheet" href="css/fas/css/all.css">
+        <link rel="stylesheet" href="css/modal.css">
+        <link rel="stylesheet" href="css/navbar.css">
+
+        <!--FAVICONS-->
+        <link rel="manifest" href="https://www.unifique.com.br/site/dist/imgs/favicon/manifest.json" crossorigin="use-credentials">
+        <link rel="icon" type="image/png" sizes="any" href="https://www.unifique.com.br/site/dist/imgs/favicon/android-icon-192x192.png">
+        <link rel="shortcut icon" type="image/x-icon" href="https://www.unifique.com.br/site/dist/imgs/favicon/favicon-default.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="https://www.unifique.com.br/site/dist/imgs/favicon/apple-icon-180x180.png">
+        <meta name="msapplication-TileImage" content="https://www.unifique.com.br/site/dist/imgs/favicon/ms-icon-144x144.png">
+
+    {% endblock %}
+    {% block extrahead %}
+    
+    {% endblock %}
+</head>
+<body class="">
+{% block navbar %}
+
+{% endblock %}
+{% block center %}
+    <div class="row">
+        <div class="column">
+            <div class="container">
+            {% block cadastro %}
+
+
+            {% endblock %}
+            </div>
+        </div>
+        <div class="column">
+            <div class="container">
+            {% block lista %}
+
+
+            {% endblock %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+
+
+
+{% endblock %}
+</body>
+</html>

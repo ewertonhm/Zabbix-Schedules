@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
+  <table name="grupo" idMethod="native" phpName="Grupo">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="nome" phpName="Nome" type="VARCHAR" size="50" required="true"/>
+    <column name="zabbixid" phpName="Zabbixid" type="VARCHAR" size="10" required="true"/>
+  </table>
+  <table name="grupo_schedule" idMethod="native" phpName="GrupoSchedule">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="description" phpName="Description" type="VARCHAR" size="100"/>
+    <column name="schedule_id" phpName="ScheduleId" type="INTEGER" required="true"/>
+    <column name="usuario_id" phpName="UsuarioId" type="INTEGER" required="true"/>
+    <column name="grupo_id" phpName="GrupoId" type="INTEGER" required="true"/>
+    <column name="scheduled" phpName="Scheduled" type="VARCHAR" size="50" required="true"/>
+    <column name="push_pop" phpName="PushPop" type="VARCHAR" size="1" required="true"/>
+    <column name="enabled" phpName="Enabled" type="VARCHAR" size="1" required="true"/>
+    <foreign-key foreignTable="grupo" name="grupo_schedule_grupo_id_fkey">
+      <reference local="grupo_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="schedule" name="grupo_schedule_schedule_id_fkey">
+      <reference local="schedule_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="grupo_schedule_usuario_id_fkey">
+      <reference local="usuario_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="host" idMethod="native" phpName="Host">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="nome" phpName="Nome" type="VARCHAR" size="50" required="true"/>
+    <column name="zabbixid" phpName="Zabbixid" type="VARCHAR" size="10" required="true"/>
+  </table>
+  <table name="host_schedule" idMethod="native" phpName="HostSchedule">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="description" phpName="Description" type="VARCHAR" size="100"/>
+    <column name="scheduled" phpName="Scheduled" type="VARCHAR" size="50" required="true"/>
+    <column name="schedule_id" phpName="ScheduleId" type="INTEGER" required="true"/>
+    <column name="host_id" phpName="HostId" type="INTEGER" required="true"/>
+    <column name="push_pop" phpName="PushPop" type="VARCHAR" size="1" required="true"/>
+    <column name="enabled" phpName="Enabled" type="VARCHAR" size="1" required="true"/>
+    <column name="usuario_id" phpName="UsuarioId" type="INTEGER"/>
+    <foreign-key foreignTable="host" name="host_schedule_host_id_fkey">
+      <reference local="host_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="schedule" name="host_schedule_schedule_id_fkey">
+      <reference local="schedule_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="host_schedule_usuario_id_fkey">
+      <reference local="usuario_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="log" idMethod="native" phpName="Log">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="logtime" phpName="Logtime" type="VARCHAR" size="50" required="true"/>
+    <column name="usuario_id" phpName="UsuarioId" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="usuario" name="log_usuario_id_fkey">
+      <reference local="usuario_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="log_delete_grupo_schedule" idMethod="native" phpName="LogDeleteGrupoSchedule">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="grupo_schedule_id" phpName="GrupoScheduleId" type="INTEGER" required="true"/>
+    <column name="log_id" phpName="LogId" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="grupo_schedule" name="log_delete_grupo_schedule_grupo_schedule_id_fkey">
+      <reference local="grupo_schedule_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="log" name="log_delete_grupo_schedule_log_id_fkey">
+      <reference local="log_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="log_delete_host_schedule" idMethod="native" phpName="LogDeleteHostSchedule">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="host_schedule_id" phpName="HostScheduleId" type="INTEGER" required="true"/>
+    <column name="log_id" phpName="LogId" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="host_schedule" name="log_delete_host_schedule_host_schedule_id_fkey">
+      <reference local="host_schedule_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="log" name="log_delete_host_schedule_log_id_fkey">
+      <reference local="log_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="log_delete_macro_schedule" idMethod="native" phpName="LogDeleteMacroSchedule">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="macro_schedule_id" phpName="MacroScheduleId" type="INTEGER" required="true"/>
+    <column name="log_id" phpName="LogId" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="log" name="log_delete_macro_schedule_log_id_fkey">
+      <reference local="log_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="macro_schedule" name="log_delete_macro_schedule_macro_schedule_id_fkey">
+      <reference local="macro_schedule_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="log_edit_host_schedule" idMethod="native" phpName="LogEditHostSchedule">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="host_schedule_id" phpName="HostScheduleId" type="INTEGER" required="true"/>
+    <column name="old_host_id" phpName="OldHostId" type="INTEGER" required="true"/>
+    <column name="new_host_id" phpName="NewHostId" type="INTEGER" required="true"/>
+    <column name="log_id" phpName="LogId" type="INTEGER" required="true"/>
+    <column name="old_data_from" phpName="OldDataFrom" type="VARCHAR" size="50" required="true"/>
+    <column name="new_date_from" phpName="NewDateFrom" type="VARCHAR" size="50" required="true"/>
+    <column name="old_date_until" phpName="OldDateUntil" type="VARCHAR" size="50" required="true"/>
+    <column name="new_date_until" phpName="NewDateUntil" type="VARCHAR" size="50" required="true"/>
+    <column name="old_push_pop" phpName="OldPushPop" type="VARCHAR" size="1" required="true"/>
+    <column name="new_push_pop" phpName="NewPushPop" type="VARCHAR" size="1" required="true"/>
+    <foreign-key foreignTable="host_schedule" name="log_edit_host_schedule_host_schedule_id_fkey">
+      <reference local="host_schedule_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="log" name="log_edit_host_schedule_log_id_fkey">
+      <reference local="log_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="host" name="log_edit_host_schedule_new_host_id_fkey">
+      <reference local="new_host_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="host" name="log_edit_host_schedule_old_host_id_fkey">
+      <reference local="old_host_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="log_edite_grupo_schedule" idMethod="native" phpName="LogEditeGrupoSchedule">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="grupo_schedule_id" phpName="GrupoScheduleId" type="INTEGER" required="true"/>
+    <column name="log_id" phpName="LogId" type="INTEGER" required="true"/>
+    <column name="old_date_from" phpName="OldDateFrom" type="VARCHAR" size="50" required="true"/>
+    <column name="new_date_from" phpName="NewDateFrom" type="VARCHAR" size="50" required="true"/>
+    <column name="old_date_until" phpName="OldDateUntil" type="VARCHAR" size="50" required="true"/>
+    <column name="new_date_until" phpName="NewDateUntil" type="VARCHAR" size="50" required="true"/>
+    <column name="old_grupo_id" phpName="OldGrupoId" type="INTEGER" required="true"/>
+    <column name="new_grupo_id" phpName="NewGrupoId" type="INTEGER" required="true"/>
+    <column name="old_push_pop" phpName="OldPushPop" type="VARCHAR" size="1" required="true"/>
+    <column name="new_push_pop" phpName="NewPushPop" type="VARCHAR" size="1" required="true"/>
+    <foreign-key foreignTable="grupo_schedule" name="log_edite_grupo_schedule_grupo_schedule_id_fkey">
+      <reference local="grupo_schedule_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="log" name="log_edite_grupo_schedule_log_id_fkey">
+      <reference local="log_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="grupo" name="log_edite_grupo_schedule_new_grupo_id_fkey">
+      <reference local="new_grupo_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="grupo" name="log_edite_grupo_schedule_old_grupo_id_fkey">
+      <reference local="old_grupo_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="log_edite_macro_schedule" idMethod="native" phpName="LogEditeMacroSchedule">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="macro_schedule_id" phpName="MacroScheduleId" type="INTEGER" required="true"/>
+    <column name="log_id" phpName="LogId" type="INTEGER" required="true"/>
+    <column name="old_date_from" phpName="OldDateFrom" type="VARCHAR" size="50" required="true"/>
+    <column name="new_date_from" phpName="NewDateFrom" type="VARCHAR" size="50" required="true"/>
+    <column name="old_date_until" phpName="OldDateUntil" type="VARCHAR" size="50" required="true"/>
+    <column name="new_date_until" phpName="NewDateUntil" type="VARCHAR" size="50" required="true"/>
+    <column name="old_original_value" phpName="OldOriginalValue" type="VARCHAR" size="50" required="true"/>
+    <column name="new_original_value" phpName="NewOriginalValue" type="VARCHAR" size="50" required="true"/>
+    <column name="old_new_value" phpName="OldNewValue" type="VARCHAR" size="50" required="true"/>
+    <column name="new_new_value" phpName="NewNewValue" type="VARCHAR" size="50" required="true"/>
+    <foreign-key foreignTable="log" name="log_edite_macro_schedule_log_id_fkey">
+      <reference local="log_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="macro_schedule" name="log_edite_macro_schedule_macro_schedule_id_fkey">
+      <reference local="macro_schedule_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="log_grupo_execution" idMethod="native" phpName="LogGrupoExecution">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="grupo_schedule_id" phpName="GrupoScheduleId" type="INTEGER" required="true"/>
+    <column name="push_pop" phpName="PushPop" type="VARCHAR" size="1" required="true"/>
+    <column name="logtime" phpName="Logtime" type="VARCHAR" size="50" required="true"/>
+    <column name="details" phpName="Details" type="VARCHAR" size="100"/>
+    <foreign-key foreignTable="grupo_schedule" name="log_grupo_execution_grupo_schedule_id_fkey">
+      <reference local="grupo_schedule_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="log_host_execution" idMethod="native" phpName="LogHostExecution">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="logtime" phpName="Logtime" type="VARCHAR" size="50" required="true"/>
+    <column name="host_schedule_id" phpName="HostScheduleId" type="INTEGER" required="true"/>
+    <column name="details" phpName="Details" type="VARCHAR" size="50"/>
+    <column name="push_pop" phpName="PushPop" type="VARCHAR" size="1" required="true"/>
+    <foreign-key foreignTable="host_schedule" name="log_host_execution_host_schedule_id_fkey">
+      <reference local="host_schedule_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="log_macro_execution" idMethod="native" phpName="LogMacroExecution">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="macro_schedule_id" phpName="MacroScheduleId" type="INTEGER" required="true"/>
+    <column name="push_pop" phpName="PushPop" type="VARCHAR" size="1" required="true"/>
+    <column name="logtime" phpName="Logtime" type="VARCHAR" size="50" required="true"/>
+    <column name="details" phpName="Details" type="VARCHAR" size="100"/>
+    <foreign-key foreignTable="macro_schedule" name="log_macro_execution_macro_schedule_id_fkey">
+      <reference local="macro_schedule_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="macro" idMethod="native" phpName="Macro">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="nome" phpName="Nome" type="VARCHAR" size="50" required="true"/>
+    <column name="zabbixid" phpName="Zabbixid" type="VARCHAR" size="10" required="true"/>
+  </table>
+  <table name="macro_schedule" idMethod="native" phpName="MacroSchedule">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="description" phpName="Description" type="VARCHAR" size="100"/>
+    <column name="schedule_id" phpName="ScheduleId" type="INTEGER" required="true"/>
+    <column name="host_id" phpName="HostId" type="INTEGER" required="true"/>
+    <column name="usuario_id" phpName="UsuarioId" type="INTEGER" required="true"/>
+    <column name="macro_id" phpName="MacroId" type="INTEGER" required="true"/>
+    <column name="scheduled" phpName="Scheduled" type="VARCHAR" size="50" required="true"/>
+    <column name="enabled" phpName="Enabled" type="VARCHAR" size="1" required="true"/>
+    <foreign-key foreignTable="host" name="macro_schedule_host_id_fkey">
+      <reference local="host_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="macro" name="macro_schedule_macro_id_fkey">
+      <reference local="macro_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="schedule" name="macro_schedule_schedule_id_fkey">
+      <reference local="schedule_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="macro_schedule_usuario_id_fkey">
+      <reference local="usuario_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="schedule" idMethod="native" phpName="Schedule">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="original_value" phpName="OriginalValue" type="VARCHAR" size="50" required="true"/>
+    <column name="new_value" phpName="NewValue" type="VARCHAR" size="50" required="true"/>
+    <column name="date_from" phpName="DateFrom" type="VARCHAR" size="50" required="true"/>
+    <column name="date_until" phpName="DateUntil" type="VARCHAR" size="50"/>
+    <column name="executed" phpName="Executed" type="BOOLEAN" size="1"/>
+    <column name="reverted" phpName="Reverted" type="BOOLEAN" size="1"/>
+  </table>
+  <table name="usuario" idMethod="native" phpName="Usuario">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="login" phpName="Login" type="VARCHAR" size="50" required="true"/>
+    <column name="nome" phpName="Nome" type="VARCHAR" size="50"/>
+    <column name="senha" phpName="Senha" type="VARCHAR" size="32" required="true"/>
+    <column name="admin" phpName="Admin" type="VARCHAR" size="1"/>
+    <column name="enabled" phpName="Enabled" type="VARCHAR" size="1" required="true"/>
+  </table>
+</database>
