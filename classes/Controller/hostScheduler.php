@@ -11,7 +11,7 @@ class HostScheduler
     {
         # verificar se o Host existe no banco, se não cria
         $host = \HostQuery::create()->filterByZabbixid($post['hostid'])->findOneOrCreate();
-        if($host->isNew()){
+        if ($host->isNew()) {
             $host->setNome($post['hostname']);
             $host->setZabbixid($post['hostid']);
             $host->save();
@@ -46,9 +46,10 @@ class HostScheduler
 
         return true;
     }
-    public static function editarHostScheduleNotExecuted($post, $userid){
+    public static function editarHostScheduleNotExecuted($post, $userid)
+    {
         $hostSchedule = \HostScheduleQuery::create()->findOneById($post['schid']);
-        if($hostSchedule != NULL){
+        if ($hostSchedule != NULL) {
             # cria o log, salva hora e id do usuário realizando a alteração.
             $log = new \Log();
             $log->setLogtime(Carbon::create()->now('America/Sao_Paulo')->getTimestamp());
@@ -65,7 +66,7 @@ class HostScheduler
 
             $Editelog->setOldDataFrom($hostSchedule->getSchedule()->getDateFrom());
             $Editelog->setNewDateFrom(Carbon::parse($post['start'], 'America/Sao_Paulo')->getTimestamp());
-            
+
             $Editelog->setOldDateUntil($hostSchedule->getSchedule()->getDateUntil());
             $Editelog->setNewDateUntil(Carbon::parse($post['end'], 'America/Sao_Paulo')->getTimestamp());
 
@@ -77,15 +78,19 @@ class HostScheduler
             # atualiza os dados 
             $hostSchedule->getSchedule()->setDateFrom(Carbon::parse($_POST['start'], 'America/Sao_Paulo')->getTimestamp());
             $hostSchedule->getSchedule()->setDateUntil(Carbon::parse($_POST['end'], 'America/Sao_Paulo')->getTimestamp());
+            $hostSchedule->setDescription($_POST['descr']);
             $hostSchedule->getSchedule()->save();
             $hostSchedule->save();
 
             return true;
-        } else { return false; }
+        } else {
+            return false;
+        }
     }
-    public static function editarHostScheduleExecuted($post, $userid){
+    public static function editarHostScheduleExecuted($post, $userid)
+    {
         $hostSchedule = \HostScheduleQuery::create()->findOneById($post['schid']);
-        if($hostSchedule != NULL){
+        if ($hostSchedule != NULL) {
             # cria o log, salva hora e id do usuário realizando a alteração.
             $log = new \Log();
             $log->setLogtime(Carbon::create()->now('America/Sao_Paulo')->getTimestamp());
@@ -102,7 +107,7 @@ class HostScheduler
 
             $Editelog->setOldDataFrom($hostSchedule->getSchedule()->getDateFrom());
             $Editelog->setNewDateFrom($hostSchedule->getSchedule()->getDateFrom());
-            
+
             $Editelog->setOldDateUntil($hostSchedule->getSchedule()->getDateUntil());
             $Editelog->setNewDateUntil(Carbon::parse($post['end'], 'America/Sao_Paulo')->getTimestamp());
 
@@ -117,10 +122,12 @@ class HostScheduler
             $hostSchedule->save();
 
             return true;
-        } else { return false; }
-
+        } else {
+            return false;
+        }
     }
-    public static function deletarHostSchedule($hostSchedule, $userid){
+    public static function deletarHostSchedule($hostSchedule, $userid)
+    {
         # cria o log, salva hora e id do usuário realizando a alteração.
         $log = new \Log();
         $log->setLogtime(Carbon::create()->now('America/Sao_Paulo')->getTimestamp());
@@ -138,7 +145,5 @@ class HostScheduler
         $hostSchedule->save();
 
         return true;
-
     }
 }
-

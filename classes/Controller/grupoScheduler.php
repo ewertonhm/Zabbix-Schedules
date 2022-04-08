@@ -7,10 +7,11 @@ use GrupoScheduleQuery;
 
 class GrupoScheduler
 {
-    public static function cadastrarGrupoSchedule($post, $userid){
+    public static function cadastrarGrupoSchedule($post, $userid)
+    {
         # verificar se o grupo existe no banco, se não cria
         $grupo = \GrupoQuery::create()->filterByZabbixid($post['groupid'])->findOneOrCreate();
-        if($grupo->isNew()){
+        if ($grupo->isNew()) {
             $grupo->setNome($post['groupname']);
             $grupo->setZabbixid($post['groupid']);
             $grupo->save();
@@ -45,9 +46,10 @@ class GrupoScheduler
 
         return true;
     }
-    public static function editarGrupoScheduleNotExecuted($post, $userid){
+    public static function editarGrupoScheduleNotExecuted($post, $userid)
+    {
         $grupoSchedule = \GrupoScheduleQuery::create()->findOneById($post['schid']);
-        if($grupoSchedule != NULL){
+        if ($grupoSchedule != NULL) {
             # cria o log, salva hora e id do usuário realizando a alteração.
             $log = new \Log();
             $log->setLogtime(Carbon::create()->now('America/Sao_Paulo')->getTimestamp());
@@ -64,7 +66,7 @@ class GrupoScheduler
 
             $Editelog->setOldDateFrom($grupoSchedule->getSchedule()->getDateFrom());
             $Editelog->setNewDateFrom(Carbon::parse($post['start'], 'America/Sao_Paulo')->getTimestamp());
-            
+
             $Editelog->setOldDateUntil($grupoSchedule->getSchedule()->getDateUntil());
             $Editelog->setNewDateUntil(Carbon::parse($post['end'], 'America/Sao_Paulo')->getTimestamp());
 
@@ -76,15 +78,19 @@ class GrupoScheduler
             # atualiza os dados 
             $grupoSchedule->getSchedule()->setDateFrom(Carbon::parse($_POST['start'], 'America/Sao_Paulo')->getTimestamp());
             $grupoSchedule->getSchedule()->setDateUntil(Carbon::parse($_POST['end'], 'America/Sao_Paulo')->getTimestamp());
+            $grupoSchedule->setDescription($_POST['descr']);
             $grupoSchedule->getSchedule()->save();
             $grupoSchedule->save();
 
             return true;
-        } else { return false; }
+        } else {
+            return false;
+        }
     }
-    public static function editarGrupoScheduleExecuted($post, $userid){
+    public static function editarGrupoScheduleExecuted($post, $userid)
+    {
         $grupoSchedule = \GrupoScheduleQuery::create()->findOneById($post['schid']);
-        if($grupoSchedule != NULL){
+        if ($grupoSchedule != NULL) {
             # cria o log, salva hora e id do usuário realizando a alteração.
             $log = new \Log();
             $log->setLogtime(Carbon::create()->now('America/Sao_Paulo')->getTimestamp());
@@ -101,7 +107,7 @@ class GrupoScheduler
 
             $Editelog->setOldDateFrom($grupoSchedule->getSchedule()->getDateFrom());
             $Editelog->setNewDateFrom($grupoSchedule->getSchedule()->getDateFrom());
-            
+
             $Editelog->setOldDateUntil($grupoSchedule->getSchedule()->getDateUntil());
             $Editelog->setNewDateUntil(Carbon::parse($post['end'], 'America/Sao_Paulo')->getTimestamp());
 
@@ -116,10 +122,12 @@ class GrupoScheduler
             $grupoSchedule->save();
 
             return true;
-        } else { return false; }
-
+        } else {
+            return false;
+        }
     }
-    public static function deletarGrupoSchedule($grupoSchedule, $userid){
+    public static function deletarGrupoSchedule($grupoSchedule, $userid)
+    {
         # cria o log, salva hora e id do usuário realizando a alteração.
         $log = new \Log();
         $log->setLogtime(Carbon::create()->now('America/Sao_Paulo')->getTimestamp());
@@ -137,6 +145,5 @@ class GrupoScheduler
         $grupoSchedule->save();
 
         return true;
-
     }
 }

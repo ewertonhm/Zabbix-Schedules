@@ -61,6 +61,9 @@
                 <input type="text" value="{{ editar_grupo.grupo }}" disabled>
                 <p style="color: red">Schedule já executado, não é possível editar a data de início</p>
 
+                <label for="descr">Descrição: </label>
+                <input type="text" value="{{ editar_grupo.descr }}" disabled>
+
                 <label for="start">Modificar em: </label>
                 <input type="datetime-local" name="start" value="{{ editar_grupo.start }}" disabled>
 
@@ -74,6 +77,9 @@
             <form method="post" action="lst-grupo-schedule.php">
                 <label for="host">Grupo: </label>
                 <input type="text" value="{{ editar_grupo.grupo }}" disabled>
+
+                <label for="descr">Descrição: </label>
+                <input type="text" value="{{ editar_grupo.descr }}" name="descr">
 
                 <label for="start">Modificar em: </label>
                 <input type="datetime-local" name="start" value="{{ editar_grupo.start }}" required>
@@ -92,6 +98,9 @@
                 <input type="text" value="{{ editar_host.host }}" disabled>
                 <p style="color: red">Schedule já executado, não é possível editar a data de início</p>
 
+                <label for="descr">Descrição: </label>
+                <input type="text" value="{{ editar_host.descr }}" disabled>
+
                 <label for="start">Modificar em: </label>
                 <input type="datetime-local" name="start" value="{{ editar_host.start }}" disabled>
 
@@ -105,6 +114,9 @@
             <form method="post" action="lst-grupo-schedule.php">
                 <label for="host">Host: </label>
                 <input type="text" value="{{ editar_host.host }}" disabled>
+
+                <label for="descr">Descrição: </label>
+                <input type="text" value="{{ editar_host.descr }}" name="descr">
 
                 <label for="start">Modificar em: </label>
                 <input type="datetime-local" name="start" value="{{ editar_host.start }}" required>
