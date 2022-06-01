@@ -11,4 +11,4 @@ require_once 'config.php';
 
 $scheduler = new Scheduler();
 $scheduler->run();
-echo "OK";
+echo "not OK";
