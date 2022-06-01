@@ -1,4 +1,3 @@
-#!/usr/bin/php -q
 <?php
 
 chdir('/var/www/zbx-schedule/');
@@ -12,6 +11,4 @@ require_once 'config.php';
 
 $scheduler = new Scheduler();
 $scheduler->run();
-
-
-?>
+echo "OK";
