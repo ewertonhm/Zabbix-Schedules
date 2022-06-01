@@ -1,0 +1,21 @@
+stages:        
+  - copy
+  - permissions
+
+copy-job: 
+    stage: copy
+    tags:
+        - tio-mon-extension
+    script:
+    - echo "Copying the code..."
+    - cp -r * /var/www/zbx-schedule/
+    - echo "Copy complete."
+
+config-permissions-job:   
+    stage: permissions  
+    tags:
+    - tio-mon-extension
+    script:
+    - echo "Fixing permissions."
+    - echo "Permissions fixed"
+
